@@ -1,11 +1,11 @@
-from flask import Flask, request,jsonify
+from flask import Flask, request,jsonify, render_template
 import os
 import logging
 from dotenv import load_dotenv
 from pymongo import MongoClient
 from bson import ObjectId
 import psutil
-
+#TST
 
 
 # Create the app
@@ -16,8 +16,8 @@ load_dotenv()
 MONGO_URL = os.getenv('MONGO_URL')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
-
-connected = False; # Flag to check if we're already connected to DB
+log_level = os.getenv("LOG_LEVEL", "INFO").upper()
+DNS_ADDRESS = os.getenv('DNS_ADDRESS')  # Get DNS address from .env
 
 #######################################
 ############### LOGGING ###############
@@ -51,17 +51,20 @@ def connect_to_db():
 # Close the database connection after each request
 @app.teardown_request
 def teardown_request(exception):
-    if client:
-        logger.info(f"Disconnected from MongoDB" )
-        client.close()
+    try:
+        if client:
+            client.close()
+            logger.info("Disconnected from MongoDB")
+    except Exception as e:
+        logger.error(f"Error while disconnecting from MongoDB: {e}")
 
 ######## BEFORE/AFTER REQUESTS ########
 #######################################
 ############### API CALLS #############
 
 @app.route('/')
-def hello_world():
-    return 'Hello, World!'
+def index():
+    return render_template('index.html', DNS_ADDRESS=DNS_ADDRESS)
 
 @app.route('/movies', methods=['GET', 'POST'])
 def get_movies():
@@ -184,5 +187,5 @@ def get_metrics():
 ########################################
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=7070, debug=True)
 

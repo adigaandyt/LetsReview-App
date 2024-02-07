@@ -3,10 +3,120 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Flask App</title>
+    <title>Movie Database</title>
 </head>
 <body>
-    <h1>Welcome to My Flask App</h1>
-    <p>This is a basic Flask application with HTML templating.</p>
+    <h1>Movie Database</h1>
+    
+    <!-- Small square with input field and buttons for delete, reviews, and adding a new movie -->
+    <div style="border: 1px solid black; padding: 10px; margin-bottom: 20px;">
+        <input type="text" id="movieIdInput" placeholder="Enter movie ID">
+        <button onclick="deleteMovie()">DELETE</button>
+        <button onclick="getMovie()">REVIEWS</button>
+        <button onclick="addMovie()">ADD MOVIE</button> <!-- New button for adding a new movie -->
+    </div>
+
+    <!-- Big square for adding a new review -->
+    <div style="border: 1px solid black; padding: 20px; margin-bottom: 20px;">
+        <h2>Add New Review</h2>
+        <textarea id="newReviewInput" style="width: 100%; height: 100px;" placeholder="Write your review here"></textarea>
+        <button onclick="addReview()">ADD</button>
+    </div>
+
+    <!-- Button to get all movies -->
+    <button onclick="getAllMovies()">Get All Movies</button>
+
+    <!-- Container to display movies -->
+    <div id="moviesContainer"></div>
+
+    <script>
+        const DNS_ADDRESS = '{{ DNS_ADDRESS }}';
+
+        function deleteMovie() {
+            const movieId = document.getElementById('movieIdInput').value;
+            if (!movieId) {
+                alert('Please enter a movie ID');
+                return;
+            }
+            fetch(`${DNS_ADDRESS}/movies/${movieId}`, { method: 'DELETE' })
+                .then(response => response.json())
+                .then(data => alert(data.message))
+                .catch(error => console.error('Error deleting movie:', error));
+        }
+
+        function getMovie() {
+            const movieId = document.getElementById('movieIdInput').value;
+            if (!movieId) {
+                alert('Please enter a movie ID');
+                return;
+            }
+            fetch(`${DNS_ADDRESS}/movies/${movieId}`)
+                .then(response => response.json())
+                .then(movie => alert(JSON.stringify(movie)))
+                .catch(error => console.error('Error fetching movie:', error));
+        }
+
+        function addReview() {
+            const movieId = document.getElementById('movieIdInput').value;
+            const newReview = document.getElementById('newReviewInput').value;
+            if (!movieId) {
+                alert('Please enter a movie ID');
+                return;
+            }
+            if (!newReview) {
+                alert('Please enter a review');
+                return;
+            }
+            fetch(`${DNS_ADDRESS}/movies/${movieId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ review: newReview })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert(data.message);
+                // Clear the input field after adding the review
+                document.getElementById('newReviewInput').value = '';
+            })
+            .catch(error => console.error('Error adding review:', error));
+        }
+
+        function addMovie() {
+            const movieTitle = document.getElementById('movieIdInput').value;
+            if (!movieTitle) {
+                alert('Please enter a movie title');
+                return;
+            }
+            fetch(`${DNS_ADDRESS}/movies`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ title: movieTitle, reviews: [] })
+            })
+            .then(response => response.json())
+            .then(data => alert(data.message))
+            .catch(error => console.error('Error adding movie:', error));
+        }
+
+        function getAllMovies() {
+            fetch(`${DNS_ADDRESS}/movies`)
+                .then(response => response.json())
+                .then(movies => displayMovies(movies))
+                .catch(error => console.error('Error fetching movies:', error));
+        }
+
+        function displayMovies(movies) {
+            const moviesContainer = document.getElementById('moviesContainer');
+            moviesContainer.innerHTML = ''; // Clear previous content
+            movies.forEach(movie => {
+                const movieElement = document.createElement('div');
+                movieElement.textContent = `ID: ${movie._id}, Title: ${movie.title}`;
+                moviesContainer.appendChild(movieElement);
+            });
+        }
+    </script>
 </body>
 </html>
