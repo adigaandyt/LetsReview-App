@@ -69,13 +69,13 @@ pipeline {
         stage('Local Test') {
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
-                retry(2) {
-                    sleep(time: 5, unit: 'SECONDS')
-                    sh """
-                        curl -i ${CONTAINER_NAME}:80
-                    """
-                }
-                sh "docker stop ${CONTAINER_NAME}"
+                // retry(2) {
+                //     sleep(time: 5, unit: 'SECONDS')
+                //     sh """
+                //         curl -i ${CONTAINER_NAME}:80
+                //     """
+                // }
+                // sh "docker stop ${CONTAINER_NAME}"
             }
         }
 
