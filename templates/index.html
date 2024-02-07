@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Movie Database</title>
+    <title>LetsReview </title>
 </head>
 <body>
-    <h1>Movie Database</h1>
+    <h1>LetsReview {{ VERSION }}</h1>
     
     <!-- Small square with input field and buttons for delete, reviews, and adding a new movie -->
     <div style="border: 1px solid black; padding: 10px; margin-bottom: 20px;">
@@ -31,6 +31,7 @@
 
     <script>
         const DNS_ADDRESS = '{{ DNS_ADDRESS }}';
+        const VERSION = '{{ VERSION }}';
 
         function deleteMovie() {
             const movieId = document.getElementById('movieIdInput').value;

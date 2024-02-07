@@ -18,6 +18,7 @@ DATABASE_NAME = os.getenv('DATABASE_NAME')
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 DNS_ADDRESS = os.getenv('DNS_ADDRESS')  # Get DNS address from .env
+VERSION = os.getenv('VERSION')
 
 #######################################
 ############### LOGGING ###############
@@ -64,7 +65,7 @@ def teardown_request(exception):
 
 @app.route('/')
 def index():
-    return render_template('index.html', DNS_ADDRESS=DNS_ADDRESS)
+    return render_template('index.html', DNS_ADDRESS=DNS_ADDRESS,VERSION=VERSION)
 
 @app.route('/movies', methods=['GET', 'POST'])
 def get_movies():
