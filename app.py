@@ -1,4 +1,4 @@
-from flask import Flask, request,jsonify, render_template
+from flask import Flask, request,jsonify, render_template, Response
 import os
 import logging
 from dotenv import load_dotenv
@@ -165,20 +165,18 @@ def health_check():
         logger.error(f"Health check failed: {e}")
         return jsonify({"status": "error"}), 500
 
-@app.route('/metrics', methods=['GET'])
+@app.route('/metrics')
 def get_metrics():
     try:
         # Gather some metrics
         cpu_usage = psutil.cpu_percent()
         memory_usage = psutil.virtual_memory().percent
 
-        # Construct a JSON response with the metrics
-        metrics = {
-            "cpu_usage": cpu_usage,
-            "memory_usage": memory_usage
-        }
+        # Construct a string with the metrics in Prometheus exposition format
+        prometheus_metrics = f"# HELP cpu_usage Percentage of CPU usage\n# TYPE cpu_usage gauge\ncpu_usage {cpu_usage}\n\n# HELP memory_usage Percentage of memory usage\n# TYPE memory_usage gauge\nmemory_usage {memory_usage}\n"
 
-        return jsonify(metrics), 200
+        # Return the metrics as a response with content type text/plain
+        return Response(prometheus_metrics, mimetype='text/plain')
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
