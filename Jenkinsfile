@@ -58,7 +58,7 @@ pipeline {
                         else
                             echo "Test container is not running."
                         fi
-                        
+
                         docker run --name ${CONTAINER_NAME} -d --rm --network art-network ourlib-img:pre-test
                     """
                 }
@@ -67,22 +67,27 @@ pipeline {
 
         //Simple curl to test it's working
         stage('Local Test') {
+            agent {
+                docker {
+                    image 'curlimages/curl:8.6.0'
+                    args '--network=art-network'
+                }
+            }
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
-                // retry(2) {
-                //     sleep(time: 5, unit: 'SECONDS')
-                //     sh """
-                //         curl -i ${CONTAINER_NAME}:80
-                //     """
-                // }
-                // sh "docker stop ${CONTAINER_NAME}"
+            // retry(2) {
+            //     sleep(time: 5, unit: 'SECONDS')
+            //     sh """
+            //         curl -i ${CONTAINER_NAME}:80
+            //     """
+            // }
+            // sh "docker stop ${CONTAINER_NAME}"
             }
         }
 
         //Test passed, push the image to ECR with the branch name as the version
         //TODO: add versioning along with the branch name
         //Using the amazon ECR plugin
-
 
         stage('Handle versioning') {
             steps {
@@ -116,13 +121,13 @@ pipeline {
                         def parts = latestTag.tokenize('.')
                         int newPatchVersion = parts[2].toInteger() + 1
                         newTagVersion = parts[0] + '.' + parts[1] + '.' + newPatchVersion
-                        println("New tag version: " + newTagVersion)
-                        // Here, you can now use newTagVersion for further steps, like tagging the current commit
+                        println('New tag version: ' + newTagVersion)
+                    // Here, you can now use newTagVersion for further steps, like tagging the current commit
                     } else {
                         // Handle case where no existing tags match the majorVersion
                         println("No existing tags found for the major version: ${majorVersion}. Starting at ${majorVersion}.0.1")
-                        newTagVersion = majorVersion + ".0.1"
-                        // Use this newTagVersion as needed
+                        newTagVersion = majorVersion + '.0.1'
+                    // Use this newTagVersion as needed
                     }
                 }
             }
@@ -176,8 +181,6 @@ pipeline {
             }
         }
 
-
-
     }
 
     post {
@@ -185,7 +188,7 @@ pipeline {
             echo 'Cleaning up workspace...'
             deleteDir()
             cleanWs()
-        sh "docker stop ${CONTAINER_NAME}"
+            sh "docker stop ${CONTAINER_NAME}"
         }
     }
 }
