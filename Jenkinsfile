@@ -65,7 +65,7 @@ pipeline {
                 retry(2) {
                     sh """
                     docker-compose up --env WORKSPACE_DIR=${WORKSPACE}
-                    docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
+                    docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
                 """
                 }
