@@ -52,14 +52,6 @@ pipeline {
                 script {
                     sh """
                         docker build --no-cache -t ${IMAGE_NAME}:pre-test ${WORKSPACE}
-                        // if docker ps | grep -q "${IMAGE_NAME}"; //then
-                        //     echo "Stopping old test container..."
-                        //     docker stop ${CONTAINER_NAME}
-                        // else
-                        //     echo "Test container is not running."
-                        // fi
-
-                        // docker run --name ${CONTAINER_NAME} -d --rm --network art-network ourlib-img:pre-test
                     """
                 }
             }
