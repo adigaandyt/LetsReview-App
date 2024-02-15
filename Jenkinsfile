@@ -64,7 +64,7 @@ pipeline {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                 retry(2) {
                     sh """
-                    docker-compose up --env-file .env_file up
+                    docker-compose --env-file .env_file up
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
                 """
