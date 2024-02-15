@@ -52,7 +52,7 @@ pipeline {
                 script {
                     sh """
                         docker build --no-cache -t ${IMAGE_NAME}:pre-test ${WORKSPACE}
-                        // if docker ps | grep -q "${IMAGE_NAME}"; then
+                        // if docker ps | grep -q "${IMAGE_NAME}"; //then
                         //     echo "Stopping old test container..."
                         //     docker stop ${CONTAINER_NAME}
                         // else
