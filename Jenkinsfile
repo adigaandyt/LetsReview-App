@@ -59,16 +59,15 @@ pipeline {
 
         //Simple curl to test it's working
         stage('Local Test') {
-
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
-                retry(2) {
-                    sh """
+                    {
+                    sh '''
                     docker-compose --env-file .env_file up
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
-                """
-                }
+                    '''
+                    }
             }
         }
 
