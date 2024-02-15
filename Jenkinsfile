@@ -59,17 +59,15 @@ pipeline {
 
         //Simple curl to test it's working
         stage('Local Test') {
-            environment {
-                WORKSPACE_DIR = "${WORKSPACE}"  // Define an environment variable with the workspace directory
-            }
+
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                 retry(2) {
-                    sh '''
-                    docker compose up
+                    sh """
+                    docker compose up -e WORKSPACE_DIR=${WORKSPACE}
                     docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker compose down
-                '''
+                """
                 }
             }
         }
