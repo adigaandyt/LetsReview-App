@@ -59,18 +59,18 @@ pipeline {
 
         //Simple curl to test it's working
         stage('Local Test') {
-
-                //docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
-        
+            environment {
+                WORKSPACE_DIR = "${WORKSPACE}"  // Define an environment variable with the workspace directory
+            }
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
-            retry(2) {
-                sh """
+                retry(2) {
+                    sh '''
                     docker compose up
                     docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker compose down
-                """
-            }
+                '''
+                }
             }
         }
 
@@ -169,13 +169,12 @@ pipeline {
                 }
             }
         }
-
     }
 
     post {
         always {
             echo 'Cleaning up workspace...'
-            sh "docker compose down"
+            sh 'docker compose down'
             deleteDir()
             cleanWs()
             sh "docker stop ${CONTAINER_NAME}"
