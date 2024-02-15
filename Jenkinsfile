@@ -183,7 +183,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            docker compose down
+            sh "docker compose down"
             deleteDir()
             cleanWs()
             sh "docker stop ${CONTAINER_NAME}"
