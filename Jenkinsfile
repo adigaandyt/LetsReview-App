@@ -20,8 +20,8 @@ pipeline {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
-                    if (BRANCH_NAME == 'main') { env.DEPLOY_PORT = '80' }
-                    else if (BRANCH_NAME == 'staging') { env.DEPLOY_PORT = '3000' }
+                    def envContent = "WORKSPACE_DIR=${WORKSPACE}"
+                    writeFile file: '.env_file', text: envContent
                     env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
                 }
             }
@@ -64,7 +64,7 @@ pipeline {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                 retry(2) {
                     sh """
-                    docker-compose up --env WORKSPACE_DIR=${WORKSPACE}
+                    docker-compose up --env-file .env_file up
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
                 """
