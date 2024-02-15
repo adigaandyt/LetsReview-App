@@ -2,7 +2,7 @@ version: '3'
 
 services:
   ourlib:
-    image: ourlib:pre-test
+    image: ourlib-img:pre-test
     container_name: ourlib-cont
     hostname: ourlib
     depends_on:
