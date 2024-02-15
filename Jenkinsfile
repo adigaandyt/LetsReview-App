@@ -52,14 +52,14 @@ pipeline {
                 script {
                     sh """
                         docker build --no-cache -t ${IMAGE_NAME}:pre-test ${WORKSPACE}
-                        if docker ps | grep -q "${IMAGE_NAME}"; then
-                            echo "Stopping old test container..."
-                            docker stop ${CONTAINER_NAME}
-                        else
-                            echo "Test container is not running."
-                        fi
+                        // if docker ps | grep -q "${IMAGE_NAME}"; then
+                        //     echo "Stopping old test container..."
+                        //     docker stop ${CONTAINER_NAME}
+                        // else
+                        //     echo "Test container is not running."
+                        // fi
 
-                        docker run --name ${CONTAINER_NAME} -d --rm --network art-network ourlib-img:pre-test
+                        // docker run --name ${CONTAINER_NAME} -d --rm --network art-network ourlib-img:pre-test
                     """
                 }
             }
@@ -67,21 +67,18 @@ pipeline {
 
         //Simple curl to test it's working
         stage('Local Test') {
-            agent {
-                docker {
-                    image 'curlimages/curl:8.6.0'
-                    args '--network=art-network'
-                }
-            }
+
+                //docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
+        
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
-            // retry(2) {
-            //     sleep(time: 5, unit: 'SECONDS')
-            //     sh """
-            //         curl -i ${CONTAINER_NAME}:80
-            //     """
-            // }
-            // sh "docker stop ${CONTAINER_NAME}"
+            retry(2) {
+                sh """
+                    docker compose up
+                    docker run --rm --network letsreview_frontend-network curlimages/curl:7.78.0 curl http://nginx:80
+                    docker compose down
+                """
+            }
             }
         }
 
@@ -186,6 +183,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
+            docker compose down
             deleteDir()
             cleanWs()
             sh "docker stop ${CONTAINER_NAME}"
