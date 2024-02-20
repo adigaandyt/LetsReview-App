@@ -5,24 +5,37 @@ pipeline {
     agent any
 
     environment {
-        // Inint with dummy values, later to be filled with .env_jenkins
-        // ECR_LINK = ''
-        // REGION = ''
-        // IMAGE_NAME = ''
-        // CONTAINER_NAME = ''
-        // APP_REPO = ''
-        // GITOPS_REPO = ''
+        // Values from env file
+        // ECR_LINK
+        // REGION
+        // IMAGE_NAME
+        // CONTAINER_NAME
+        // APP_REPO
+        // GITOPS_REPO
         // Init empty values, used during pipeline
         OUTPUT_VERSION = ''
         newTagVersion = ''
     }
 
     stages {
+        stage('Checkout Source') {
+            steps {
+                echo '++++++++++CHECKOUT SOURCE++++++++++'
+                script {
+                    checkout scm
+                    sh """
+                        echo "Push from branch - ${BRANCH_NAME}"
+                        echo "The full tag = ${env.FULL_TAG}"
+                    """
+                }
+            }
+        }
+
         stage('Setup environment') {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
-                    echo "Loading variables from .env.groovy"
+                    echo 'Loading variables from .env.groovy'
                     load "$WORKSPACE/.env.groovy"
                     echo "ECR_LINK = ${env.ECR_LINK}"
                     echo "REGION = ${env.REGION}"
@@ -31,19 +44,6 @@ pipeline {
                     echo "APP_REPO = ${env.APP_REPO}"
                     echo "OUTPUT_VERSION = ${env.OUTPUT_VERSION}"
                     echo "newTagVersion = ${env.newTagVersion}"
-                }
-            }
-        }
-
-        stage('Checkout Source') {
-            steps {
-                echo '++++++++++CHECKOUT SOURCE++++++++++'
-                script {
-                    sh """
-                        echo "Push from branch - ${BRANCH_NAME}"
-                        echo "The full tag = ${env.FULL_TAG}"
-                    """
-                    checkout scm
                 }
             }
         }
