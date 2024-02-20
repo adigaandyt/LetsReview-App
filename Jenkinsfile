@@ -82,7 +82,7 @@ pipeline {
                     sh 'apk add curl'
                     echo 'Running tests with docker agent...'
                     sh 'chmod +x /e2e_test.sh'
-                    sh './e2e_test.sh'
+                    sh '/e2e_test.sh'
             }
         }
 
