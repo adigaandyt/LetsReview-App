@@ -22,9 +22,9 @@ pipeline {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
                     def envVars = readProperties file: '.env_jenkins'
-                        envVars.each { key, value ->
-                            env[key] = value
-                        }
+                    envVars.each { key, value ->
+                        env[key] = value
+                    }
                     def envContent = "WORKSPACE_DIR=${WORKSPACE}"
                     writeFile file: '.env_file', text: envContent
                     env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
