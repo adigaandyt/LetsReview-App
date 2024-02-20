@@ -60,7 +60,7 @@ pipeline {
         }
 
         //Simple curl to test it's working
-        stage('Local Test') {
+        stage('Unti Test') {
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                     sh '''
@@ -71,9 +71,18 @@ pipeline {
             }
         }
 
-        //Test passed, push the image to ECR with the branch name as the version
-        //TODO: add versioning along with the branch name
-        //Using the amazon ECR plugin
+        stage('E2E Test') {
+            steps {
+                echo '++++++++++LOCAL UNIT TEST++++++++++'
+                    echo 'Running End-to-End Tests...'
+                    sh '''         
+                    docker-compose up -d
+                    chmod +x e2e_test.sh
+                    ./e2e_test.sh
+                    docker-compose down
+                    '''
+            }
+        }
 
         stage('Handle versioning') {
             steps {
@@ -153,7 +162,7 @@ pipeline {
                     sshagent(['jenkins-ssh']) {
                         sh """
                             git clone ${GITOPS_REPO}
-                            valuesFilePath="./ourlibrary_gitops/ourlibrary-chart/values.yaml"
+                            valuesFilePath="./ourlibrary_gitops/charts/ourlibrary-chart/values.yaml"
                             valuesFileContent=\$(cat "\$valuesFilePath")
                             valuesFileContent=\$(echo "\$valuesFileContent" | sed "s/tag: [0-9]\\+\\.[0-9]\\+\\.[0-9]\\+/tag: ${newTagVersion}/g")
                             echo "\$valuesFileContent" > "\$valuesFilePath"
