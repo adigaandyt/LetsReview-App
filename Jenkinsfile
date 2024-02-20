@@ -64,7 +64,7 @@ pipeline {
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                     sh '''
-                    docker-compose up
+                    docker-compose up -d
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
                     '''
