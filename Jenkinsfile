@@ -80,6 +80,7 @@ pipeline {
             steps {
                     sh 'apk update'
                     sh 'apk add curl'
+                    sh 'ls'
                     echo 'Running tests with docker agent...'
                     sh 'chmod +x /e2e_test.sh'
                     sh 'bash /e2e_test.sh'
