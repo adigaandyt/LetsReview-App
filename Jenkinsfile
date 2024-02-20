@@ -6,12 +6,12 @@ pipeline {
 
     environment {
         // Inint with dummy values, later to be filled with .env_jenkins
-        ECR_LINK = ''
-        REGION = ''
-        IMAGE_NAME = ''
-        CONTAINER_NAME = ''
-        APP_REPO = ''
-        GITOPS_REPO = ''
+        // ECR_LINK = ''
+        // REGION = ''
+        // IMAGE_NAME = ''
+        // CONTAINER_NAME = ''
+        // APP_REPO = ''
+        // GITOPS_REPO = ''
         // Init empty values, used during pipeline
         OUTPUT_VERSION = ''
         newTagVersion = ''
