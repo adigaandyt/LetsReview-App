@@ -66,21 +66,28 @@ pipeline {
                     sh '''
                     docker-compose up -d
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
-                    docker-compose down
                     '''
             }
         }
 
         stage('E2E Test') {
+            agent {
+                docker {
+                    image 'bash'
+                    args '--network frontend-network'
+                }
+            }
             steps {
-                echo '++++++++++LOCAL UNIT TEST++++++++++'
-                    echo 'Running End-to-End Tests...'
-                    sh '''         
-                    docker-compose up -d
-                    chmod +x e2e_test.sh
-                    docker run --rm --network frontend-network curlimages/curl:7.78.0 ./e2e_test.sh
-                    docker-compose down
-                    '''
+                    sh 'apt-get update'
+                    sh 'apt-get install curl'
+                    echo 'Running tests with docker agent...'
+                    sh 'chmod +x ./e2e_test.sh'
+                    sh './e2e_test.sh'
+            }
+            post{
+                always {
+                    sh 'docker-compose down'
+                }
             }
         }
 
