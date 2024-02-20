@@ -78,7 +78,7 @@ pipeline {
                     sh '''         
                     docker-compose up -d
                     chmod +x e2e_test.sh
-                    ./e2e_test.sh
+                    docker run --rm --network frontend-network curlimages/curl:7.78.0 ./e2e_test.sh
                     docker-compose down
                     '''
             }
