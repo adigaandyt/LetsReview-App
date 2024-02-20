@@ -78,16 +78,11 @@ pipeline {
                 }
             }
             steps {
-                    sh 'apt-get update'
-                    sh 'apt-get install curl'
+                    sh 'apk update'
+                    sh 'apk add curl'
                     echo 'Running tests with docker agent...'
                     sh 'chmod +x ./e2e_test.sh'
                     sh './e2e_test.sh'
-            }
-            post{
-                always {
-                    sh 'docker-compose down'
-                }
             }
         }
 
