@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base URL for your application
-BASE_URL="http://localhost:80"
+BASE_URL="http://nginx:80"
 
 curl -X POST ${BASE_URL}/health
 
