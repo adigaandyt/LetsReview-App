@@ -5,14 +5,12 @@ pipeline {
     agent any
 
     environment {
-        ECR_LINK = '644435390668.dkr.ecr.eu-west-1.amazonaws.com'
-        REGION = 'eu-west-1'
+        def envVars = readProperties file: '.env_jenkins'
+            envVars.each { key, value ->
+                env[key] = value
+            }
         OUTPUT_VERSION = ''
-        IMAGE_NAME = 'ourlib-img'
-        CONTAINER_NAME = 'ourlib-cont'
         newTagVersion = ''
-        APP_REPO = 'git@github.com:adigaandyt/LetsReview.git'
-        GITOPS_REPO = 'git@github.com:adigaandyt/ourlibrary_gitops.git'
     }
 
     stages {
@@ -40,12 +38,6 @@ pipeline {
             }
         }
 
-        //Build the image and give it a pre-test tag until it passes the tests
-        //Also make sure containers aren't running from previous runs
-        //I could make image name and container names as variables in the compose file but there's no need
-        //TODO: MAKE IT WORK WITH DOCKER COMPOSE THERES
-        //TODO: FIX THE NETWORK ISSUE WITH DOCKER COMPOSE
-        //docker run --name ourlib-cont -d --rm -p 8000:8000 --network art-network ourlib-img:pre-test
         stage('Build') {
             steps {
                 echo '++++++++++BUILD IMAGE++++++++++'
