@@ -15,7 +15,7 @@ pipeline {
         OUTPUT_VERSION = ''
         newTagVersion = ''
     }
-
+//asd
     stages {
         stage('Setup environment') {
             steps {
@@ -31,6 +31,7 @@ pipeline {
                 }
             }
         }
+
 
         stage('Checkout Source') {
             steps {
