@@ -21,13 +21,13 @@ pipeline {
         stage('Setup environment') {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
-                script {
-                    def props = readProperties file: '.env_jenkins'
-                    props.each {
-                        env[it.key] = it.value
-                    }
-                     env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
-                }
+                // script {
+                //     def props = readProperties file: '.env_jenkins'
+                //     props.each {
+                //         env[it.key] = it.value
+                //     }
+                //      env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
+                // }
             }
         }
 
