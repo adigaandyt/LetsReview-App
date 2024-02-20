@@ -1,5 +1,5 @@
 ECR_LINK="644435390668.dkr.ecr.eu-west-1.amazonaws.com"
-REGION=eu-"west-1"
+REGION="eu-west-1"
 IMAGE_NAME="ourlib-img"
 CONTAINER_NAME="ourlib-cont"
 APP_REPO="git@github.com:adigaandyt/LetsReview.git"
