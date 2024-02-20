@@ -23,12 +23,12 @@ pipeline {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
                     def envVars = readProperties file: '.env_jenkins'
-                    envVars.each { key, value ->
-                        env[key] = value
-                    }
-                    def envContent = "WORKSPACE_DIR=${WORKSPACE}"
-                    writeFile file: '.env_file', text: envContent
-                    env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
+                        envVars.each { key, value ->
+                            env[key] = value
+                        }
+                    // def envContent = "WORKSPACE_DIR=${WORKSPACE}"
+                    // writeFile file: '.env_file', text: envContent
+                     env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
                 }
             }
         }
@@ -62,7 +62,7 @@ pipeline {
             steps {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                     sh '''
-                    docker-compose --env-file .env_file up
+                    docker-compose up
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     docker-compose down
                     '''
