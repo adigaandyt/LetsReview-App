@@ -22,11 +22,14 @@ pipeline {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
-                    // Assuming .env_jenkins is present in the workspace and formatted as KEY=VALUE
-                    def props = readProperties file: '.env_jenkins'
-                    props.each {
-                        env[it.key] = it.value
-                    }
+                    load "$WORKSPACE/.env_jenkins.groovy"
+                    echo "ECR_LINK = ${env.ECR_LINK}"
+                    echo "REGION = ${env.REGION}"
+                    echo "IMAGE_NAME = ${env.IMAGE_NAME}"
+                    echo "CONTAINER_NAME= ${env.CONTAINER_NAME}"
+                    echo "APP_REPO = ${env.APP_REPO}"
+                    echo "OUTPUT_VERSION = ${env.OUTPUT_VERSION}"
+                    echo "newTagVersion = ${env.newTagVersion}"
                 }
             }
         }
