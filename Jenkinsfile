@@ -22,7 +22,7 @@ pipeline {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
-                    load "$WORKSPACE/.env_jenkins.groovy"
+                    load "${WORKSPACE}/.env_jenkins.groovy"
                     echo "ECR_LINK = ${env.ECR_LINK}"
                     echo "REGION = ${env.REGION}"
                     echo "IMAGE_NAME = ${env.IMAGE_NAME}"
