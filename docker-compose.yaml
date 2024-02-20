@@ -41,8 +41,6 @@ services:
       - '80:80'
     volumes:
       - static-files:/etc/nginx/html
-    environment:
-      WORKSPACE_DIR: ${WORKSPACE_DIR}
     depends_on:
       - ourlib
     networks:
