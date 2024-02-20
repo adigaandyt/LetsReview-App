@@ -5,13 +5,14 @@ pipeline {
     agent any
 
     environment {
-        // ECR_LINK = '644435390668.dkr.ecr.eu-west-1.amazonaws.com'
-        // REGION = 'eu-west-1'
-        // IMAGE_NAME = 'ourlib-img'
-        // CONTAINER_NAME = 'ourlib-cont'
-        // APP_REPO = 'git@github.com:adigaandyt/LetsReview.git'
-        // GITOPS_REPO = 'git@github.com:adigaandyt/ourlibrary_gitops.git'
-
+        // Inint with dummy values, later to be filled with .env_jenkins
+        ECR_LINK = ''
+        REGION = ''
+        IMAGE_NAME = ''
+        CONTAINER_NAME = ''
+        APP_REPO = ''
+        GITOPS_REPO = ''
+        // Init empty values, used during pipeline
         OUTPUT_VERSION = ''
         newTagVersion = ''
     }
