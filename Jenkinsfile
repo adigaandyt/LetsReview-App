@@ -74,16 +74,15 @@ pipeline {
             agent {
                 docker {
                     image 'bash'
-                    args '--network frontend-network -v ./e2e_test.sh:/e2e_test.sh'
+                    args '--network frontend-network'
                 }
             }
             steps {
                     sh 'apk update'
                     sh 'apk add curl'
-                    sh 'ls'
                     echo 'Running tests with docker agent...'
-                    sh 'chmod +x /e2e_test.sh'
-                    sh 'bash /e2e_test.sh'
+                    sh 'chmod +x ./e2e_test.sh'
+                    sh 'bash ./e2e_test.sh'
             }
         }
 
