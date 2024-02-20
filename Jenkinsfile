@@ -74,14 +74,14 @@ pipeline {
             agent {
                 docker {
                     image 'bash'
-                    args '--network frontend-network'
+                    args '--network frontend-network -v ./e2e_test.sh:/e2e_test.sh'
                 }
             }
             steps {
                     sh 'apk update'
                     sh 'apk add curl'
                     echo 'Running tests with docker agent...'
-                    sh 'chmod +x ./e2e_test.sh'
+                    sh 'chmod +x /e2e_test.sh'
                     sh './e2e_test.sh'
             }
         }
@@ -182,7 +182,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up workspace...'
-            sh 'docker-compose down'
+            sh 'docker-compose down -v'
             deleteDir()
             cleanWs()
             sh "docker stop ${CONTAINER_NAME}"
