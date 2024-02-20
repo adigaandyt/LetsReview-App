@@ -5,10 +5,13 @@ pipeline {
     agent any
 
     environment {
-        def envVars = readProperties file: '.env_jenkins'
-            envVars.each { key, value ->
-                env[key] = value
-            }
+        // ECR_LINK = '644435390668.dkr.ecr.eu-west-1.amazonaws.com'
+        // REGION = 'eu-west-1'
+        // IMAGE_NAME = 'ourlib-img'
+        // CONTAINER_NAME = 'ourlib-cont'
+        // APP_REPO = 'git@github.com:adigaandyt/LetsReview.git'
+        // GITOPS_REPO = 'git@github.com:adigaandyt/ourlibrary_gitops.git'
+
         OUTPUT_VERSION = ''
         newTagVersion = ''
     }
@@ -18,6 +21,10 @@ pipeline {
             steps {
                 echo '++++++++++ENV SETUP++++++++++'
                 script {
+                    def envVars = readProperties file: '.env_jenkins'
+                        envVars.each { key, value ->
+                            env[key] = value
+                        }
                     def envContent = "WORKSPACE_DIR=${WORKSPACE}"
                     writeFile file: '.env_file', text: envContent
                     env.FULL_TAG = "${BRANCH_NAME}-${BUILD_NUMBER}"
