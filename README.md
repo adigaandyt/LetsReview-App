@@ -35,7 +35,7 @@ It's a simple HTML page with a big text box and a small text box
 7) Put ID in the small box and click delete to delete the movie
 
 # Docker Compose 3 Tier Architecture
-[docker-compose Architecture](./diagrams/docker-compose-arch.png)
+![docker-compose Architecture](./diagrams/docker-compose-arch.png)
 We see here how docker compose deploys the application
 
 nginx - the nginx container that gets created using `NGINX/dockerfile` sitting on the frontend-network with port 80 mapped to the host's port 80, also has a named volume mounted that has the app's static files, and forwards the reqeusts to the apps port 7070<br>
