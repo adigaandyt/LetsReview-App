@@ -1,5 +1,43 @@
-/* groovylint-disable NestedBlockDepth */
+/* groovylint-disable LineLength, NestedBlockDepth */
 //Top level def for the whole pipeline
+
+def findLatestPatch(String tagsOutput){
+    def tagsArray = tagsOutput.split('\n')
+    int maxPatch = 0
+    String latestTag = ''
+    String majorVersion = '1' // Assuming you will set this based on the branch name or another method
+
+    // Find the highest patch version for the major version
+    tagsArray.each { tag ->
+        // Ensure the tag is relevant and follows semantic versioning
+        if (tag.startsWith(majorVersion)) {
+            def parts = tag.tokenize('.')
+            if (parts.size() == 3) {
+                int patchVersion = parts[2].toInteger()
+                if (patchVersion >= maxPatch) {
+                    maxPatch = patchVersion
+                    latestTag = tag
+                }
+            }
+        }
+    }
+    return latestTag
+}
+
+def incrementPatch(String latestTag){
+    if (latestTag) {
+        def parts = latestTag.tokenize('.')
+        int newPatchVersion = parts[2].toInteger() + 1
+        newTagVersion = parts[0] + '.' + parts[1] + '.' + newPatchVersion
+        println('New tag version: ' + newTagVersion)
+        return newTagVersion
+    } else {
+        // Handle case where no existing tags match the majorVersion
+        println("No existing tags found for the major version: ${majorVersion}. Starting at ${majorVersion}.0.1")
+        newTagVersion = majorVersion + '.0.1'
+        return newTagVersion
+    }
+}
 
 pipeline {
     agent any
@@ -78,9 +116,6 @@ pipeline {
                 }
             }
             steps {
-                    sh 'apk update'
-                    sh 'apk add curl'
-                    sh 'apk add jq'
                     echo 'Running tests with docker agent...'
                     sh 'chmod +x ./e2e_test.sh'
                     sh 'bash ./e2e_test.sh'
@@ -91,42 +126,13 @@ pipeline {
             steps {
                 echo '++++++++++Handle new version++++++++++'
                 script {
-                    // Fetch tags and define initial variables
+                    //Fetch and save tags
                     sh 'git fetch --tags'
-                    String tagsOutput = sh(script: 'git tag', returnStdout: true).trim()
-                    def tagsArray = tagsOutput.split('\n')
-                    int maxPatch = 0
-                    String latestTag = ''
-                    String majorVersion = '' // Assuming you will set this based on the branch name or another method
-
-                    // Find the highest patch version for the major version
-                    tagsArray.each { tag ->
-                        // Ensure the tag is relevant and follows semantic versioning
-                        if (tag.startsWith(majorVersion)) {
-                            def parts = tag.tokenize('.')
-                            if (parts.size() == 3) {
-                                int patchVersion = parts[2].toInteger()
-                                if (patchVersion >= maxPatch) {
-                                    maxPatch = patchVersion
-                                    latestTag = tag
-                                }
-                            }
-                        }
-                    }
-
-                    // Increment the patch version for the new tag
-                    if (latestTag) {
-                        def parts = latestTag.tokenize('.')
-                        int newPatchVersion = parts[2].toInteger() + 1
-                        newTagVersion = parts[0] + '.' + parts[1] + '.' + newPatchVersion
-                        println('New tag version: ' + newTagVersion)
-                    // Here, you can now use newTagVersion for further steps, like tagging the current commit
-                    } else {
-                        // Handle case where no existing tags match the majorVersion
-                        println("No existing tags found for the major version: ${majorVersion}. Starting at ${majorVersion}.0.1")
-                        newTagVersion = majorVersion + '.0.1'
-                    // Use this newTagVersion as needed
-                    }
+                    String tagsOutput = sh(script: 'git tag', returnStdout: true).trim() 
+                    //Get the one with the largest patch
+                    latestTag = findLatestPatch(tagsOutput)
+                     //patch++
+                    newTagVersion = incrementPatch(latestTag)
                 }
             }
         }
@@ -142,7 +148,6 @@ pipeline {
             }
         }
 
-        //TODO: Only increase tag when there's a git message saying so
         stage('Tag GIT') {
             steps {
                 script {

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+apk update
+apk add curl
+apk add jq
+
 # Base URL for your application
 BASE_URL="http://nginx:80"
 
