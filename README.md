@@ -37,9 +37,11 @@ It's a simple HTML page with a big text box and a small text box
 # Docker Compose 3 Tier Architecture
 ![docker-compose Architecture](./diagrams/docker-compose-arch.png)
 We see here how docker compose deploys the application
+we have 3 containers, one for each tier
+**nginx** - the nginx container that gets created using `NGINX/dockerfile` sitting on the frontend-network with port 80 mapped to the host's port 80, also has a named volume mounted that has the app's static files, and forwards the reqeusts to the apps port 7070<br>
 
-nginx - the nginx container that gets created using `NGINX/dockerfile` sitting on the frontend-network with port 80 mapped to the host's port 80, also has a named volume mounted that has the app's static files, and forwards the reqeusts to the apps port 7070<br>
-ourlib - the app's container with a named volume mounted to where the static files are, has no ports mapped to host, sits on the frontend and backend networks to get requests from the frontend and send them to the backend (to the database)<br>
-mongodb - a mongodb container sitting on the backend network with a namned volume mounted for storing data, gets requests from the app on port 27017<br>
+**ourlib** - the app's container with a named volume mounted to where the static files are, has no ports mapped to host, sits on the frontend and backend networks to get requests from the frontend and send them to the backend (to the database)<br>
+
+**mongodb** - a mongodb container sitting on the backend network with a namned volume mounted for storing data, gets requests from the app on port 27017<br>
 
 
