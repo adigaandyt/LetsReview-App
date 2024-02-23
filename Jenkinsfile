@@ -170,11 +170,11 @@ pipeline {
                     sshagent(['jenkins-ssh']) {
                         sh """
                             git clone ${GITOPS_REPO}
-                            valuesFilePath="./ourlibrary_gitops/charts/ourlibrary-chart/values.yaml"
+                            valuesFilePath="./LetsReview-GitOps/charts/letsreview-chart/values.yaml"
                             valuesFileContent=\$(cat "\$valuesFilePath")
                             valuesFileContent=\$(echo "\$valuesFileContent" | sed "s/tag: [0-9]\\+\\.[0-9]\\+\\.[0-9]\\+/tag: ${newTagVersion}/g")
                             echo "\$valuesFileContent" > "\$valuesFilePath"
-                            cd ourlibrary_gitops
+                            cd LetsReview-GitOps
                             git add .
                             git commit -m "Update Helm chart tag: ${newTagVersion}"
                             git push origin main

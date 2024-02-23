@@ -26,7 +26,7 @@ services:
     #   - '27017:27017'
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: pass
+      MONGO_INITDB_ROOT_PASSWORD: pass # password for a quick local test
       MONGO_INITDB_DATABASE: mydb
     volumes:
       - mongo-data:/data/db
