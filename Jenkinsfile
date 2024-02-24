@@ -103,6 +103,7 @@ pipeline {
                 echo '++++++++++LOCAL UNIT TEST++++++++++'
                     sh '''
                     docker-compose up -d
+                    sleep 5
                     docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
                     '''
             }
