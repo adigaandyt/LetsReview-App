@@ -1,10 +1,10 @@
 version: '3'
 
 services:
-  ourlib:
-    image: ourlib-img:pre-test
-    container_name: ourlib-cont
-    hostname: ourlib
+  letsreview:
+    image: letsreview-img:pre-test
+    container_name: letsreview-cont
+    hostname: letsreview
     depends_on:
       - mongodb
     # ports:
@@ -42,7 +42,7 @@ services:
     volumes:
       - static-files:/etc/nginx/html
     depends_on:
-      - ourlib
+      - letsreview
     networks:
       - frontend-network
 
