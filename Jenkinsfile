@@ -141,9 +141,9 @@ pipeline {
             steps {
                 echo '++++++++++PUSH ECR++++++++++'
                 sh """
-                    docker tag ${IMAGE_NAME}:pre-test "${ECR_LINK}/our_library:${newTagVersion}"
+                    docker tag ${IMAGE_NAME}:pre-test "${ECR_LINK}/letsreview:${newTagVersion}"
                     aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ECR_LINK}
-                    docker push ${ECR_LINK}/our_library:${newTagVersion}
+                    docker push ${ECR_LINK}/letsreview:${newTagVersion}
                 """
             }
         }

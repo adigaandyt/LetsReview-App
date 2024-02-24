@@ -1,6 +1,6 @@
 env.ECR_LINK="644435390668.dkr.ecr.eu-west-1.amazonaws.com"
 env.REGION="eu-west-1"
-env.IMAGE_NAME="ourlib-img"
-env.CONTAINER_NAME="ourlib-cont"
+env.IMAGE_NAME="letsreview-img"
+env.CONTAINER_NAME="letsreview-cont"
 env.APP_REPO="git@github.com:adigaandyt/LetsReview-App.git"
 env.GITOPS_REPO="git@github.com:adigaandyt/LetsReview-GitOps.git"
