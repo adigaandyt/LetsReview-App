@@ -15,6 +15,7 @@ app = Flask(__name__)
 load_dotenv()
 MONGO_URL = os.getenv('MONGO_URL')
 DATABASE_NAME = os.getenv('DATABASE_NAME')
+print(f"Database name: {DATABASE_NAME}")
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 log_level = os.getenv("LOG_LEVEL", "INFO").upper()
 DNS_ADDRESS = os.getenv('DNS_ADDRESS')  # Get DNS address from .env
