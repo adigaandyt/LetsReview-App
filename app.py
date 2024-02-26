@@ -44,7 +44,6 @@ def connect_to_db():
     try:
         client = MongoClient(MONGO_URL)
         db = client.get_database(DATABASE_NAME)  # Specify your database name here
-        logger.info(f"Database name: {MONGO_URL}")
         logger.info(f"Connected to MongoDB" )
     except Exception as e:
         logger.error(f"Failed to connect to MongoDB: {e}")
