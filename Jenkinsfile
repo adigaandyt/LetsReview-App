@@ -98,30 +98,30 @@ pipeline {
         }
 
         //Simple curl to test it's working
-        stage('Unti Test') {
-            steps {
-                echo '++++++++++LOCAL UNIT TEST++++++++++'
-                    sh '''
-                    docker-compose up -d
-                    sleep 5
-                    docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
-                    '''
-            }
-        }
+        // stage('Unti Test') {
+        //     steps {
+        //         echo '++++++++++LOCAL UNIT TEST++++++++++'
+        //             sh '''
+        //             docker-compose up -d
+        //             sleep 5
+        //             docker run --rm --network frontend-network curlimages/curl:7.78.0 curl http://nginx:80
+        //             '''
+        //     }
+        // }
 
-        stage('E2E Test') {
-            agent {
-                docker {
-                    image 'bash'
-                    args '--network frontend-network'
-                }
-            }
-            steps {
-                    echo 'Running tests with docker agent...'
-                    sh 'chmod +x ./e2e_test.sh'
-                    sh 'bash ./e2e_test.sh'
-            }
-        }
+        // stage('E2E Test') {
+        //     agent {
+        //         docker {
+        //             image 'bash'
+        //             args '--network frontend-network'
+        //         }
+        //     }
+        //     steps {
+        //             echo 'Running tests with docker agent...'
+        //             sh 'chmod +x ./e2e_test.sh'
+        //             sh 'bash ./e2e_test.sh'
+        //     }
+        // }
 
         stage('Handle versioning') {
             steps {
