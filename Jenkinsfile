@@ -110,12 +110,12 @@ pipeline {
         }
 
         stage('E2E Test') {
-            agent {
-                docker {
-                    image 'bash'
-                    args '--network frontend-network'
-                }
-            }
+            // agent {
+            //     docker {
+            //         image 'bash'
+            //         args '--network frontend-network'
+            //     }
+            // }
             steps {
                     echo 'Running tests with docker agent...'
                     // sh 'chmod +x ./e2e_test.sh'
