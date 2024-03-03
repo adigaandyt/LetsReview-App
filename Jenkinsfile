@@ -110,17 +110,17 @@ pipeline {
         }
 
         stage('E2E Test') {
-            // agent {
-            //     docker {
-            //         image 'bash'
-            //         args '--network frontend-network'
-            //     }
-            // }
-            // steps {
-            //         echo 'Running tests with docker agent...'
-            //         sh 'chmod +x ./e2e_test.sh'
-            //         sh 'bash ./e2e_test.sh'
-            // }
+            agent {
+                docker {
+                    image 'bash'
+                    args '--network frontend-network'
+                }
+            }
+            steps {
+                    echo 'Running tests with docker agent...'
+                    sh 'chmod +x ./e2e_test.sh'
+                    sh 'bash ./e2e_test.sh'
+            }
         }
 
         stage('Handle versioning') {
